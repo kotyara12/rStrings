@@ -9,7 +9,7 @@
 #ifndef __RSTRINGS32_H__
 #define __RSTRINGS32_H__
 
-#include <types.h>
+#include <time.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -24,5 +24,5 @@ char* malloc_timestr(const char *format, time_t value);
 #endif
 
 
-#endif __RSTRINGS32_H__
+#endif // __RSTRINGS32_H__
 
