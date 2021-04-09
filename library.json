@@ -1,0 +1,16 @@
+{
+  "name": "rStrings",
+  "version": "1.0.0",
+  "description": "Simple library for dynamically generating strings based on templates (format and time)",
+  "keywords": "strings",
+  "authors":
+  [
+    {
+      "name": "Alexander Razzhivin",
+      "email": "kotyara12@yandex.ru",
+      "url": "https://kotyara12.ru"
+    }
+  ],
+  "license": "MIT",
+  "frameworks": ["arduino", "espidf"]  
+}
