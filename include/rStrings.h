@@ -6,8 +6,8 @@
    kotyara12@yandex.ru | https://kotyara12.ru | tg: @kotyara1971
 */
 
-#ifndef __RSTRINGS32_H__
-#define __RSTRINGS32_H__
+#ifndef __R_STRINGS_H__
+#define __R_STRINGS_H__
 
 #include <time.h>
 
@@ -98,5 +98,5 @@ char * mqttGetTopic(const char *topic1, const char *topic2, const char *topic3);
 #endif
 
 
-#endif // __RSTRINGS32_H__
+#endif // __R_STRINGS_H__
 
