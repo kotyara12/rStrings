@@ -44,8 +44,8 @@ char* malloc_timestr(const char *format, time_t value);
 #if CONFIG_MQTT_LOCATION_ENABLED
 char * mqttGetTopicCustom0(const char *perfix, const char *location, const char *topic);
 #else
-#endif // CONFIG_MQTT_LOCATION_ENABLED
 char * mqttGetTopicCustom0(const char *perfix, const char *topic);
+#endif // CONFIG_MQTT_LOCATION_ENABLED
 char * mqttGetTopic0(const char *topic);
 
 /**
