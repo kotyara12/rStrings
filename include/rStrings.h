@@ -71,7 +71,7 @@ char * mqttGetTopic1(const char *topic);
  * Generation of a name of a topic: prefix + location + / + device + / + topic1 + / + topic2
  * for example: "/village/heater/bedroom/temperature"
  * 
- * Note: mqttGetTopic1 uses values from project_congig.h
+ * Note: mqttGetTopic2 uses values from project_congig.h
  * 
  * @param perfix - Server topic prefix, may be "/" or "" or "user_XXXX" for some servers
  * @param location - Device location, may be "home" or "village"
@@ -91,7 +91,7 @@ char * mqttGetTopic2(const char *topic1, const char *topic2);
  * Generation of a name of a topic: prefix + location + / + device + / + topic1 + / + topic2 + / + topic3
  * for example: "/village/heater/bedroom/temperature/sensor_status"
  * 
- * Note: mqttGetTopic1 uses values from project_congig.h
+ * Note: mqttGetTopic3 uses values from project_congig.h
  * 
  * @param perfix - Server topic prefix, may be "/" or "" or "user_XXXX" for some servers
  * @param location - Device location, may be "home" or "village"
@@ -107,7 +107,27 @@ char * mqttGetTopicCustom3(const char *perfix, const char *location, const char 
 char * mqttGetTopicCustom3(const char *perfix, const char *device, const char *topic1, const char *topic2, const char *topic3);
 #endif // CONFIG_MQTT_LOCATION_ENABLED
 char * mqttGetTopic3(const char *topic1, const char *topic2, const char *topic3);
+
+/**
+ * Automatic topic generation depending on the number of non-empty components
+ * 
+ * Note: mqttGetTopic uses values from project_congig.h
+ * 
+ * @param topic1 - Topic name
+ * @param topic2 - Subtopic name
+ * @param topic3 - Subsubtopic name
+ * @return - Pointer to a string in heap. Remember to free it after using the function esp_mqtt_free_string() or free();
+ * */
 char * mqttGetTopic(const char *topic1, const char *topic2, const char *topic3);
+
+/**
+ * Adding one or more parts to the current topic
+ * 
+ * @param topic - Topic name
+ * @param subtopic - Subtopic name
+ * @return - Pointer to a string in heap. Remember to free it after using the function esp_mqtt_free_string() or free();
+ * */
+char * mqttGetSubTopic(const char *topic, const char *subtopic);
 
 #ifdef __cplusplus
 }
