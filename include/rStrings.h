@@ -114,8 +114,8 @@ char * mqttGetTopic3(const char *topic1, const char *topic2, const char *topic3)
  * Note: mqttGetTopic uses values from project_congig.h
  * 
  * @param topic1 - Topic name
- * @param topic2 - Subtopic name
- * @param topic3 - Subsubtopic name
+ * @param topic2 - Subtopic name (optional)
+ * @param topic3 - Subsubtopic name (optional)
  * @return - Pointer to a string in heap. Remember to free it after using the function esp_mqtt_free_string() or free();
  * */
 char * mqttGetTopic(const char *topic1, const char *topic2, const char *topic3);
@@ -124,7 +124,7 @@ char * mqttGetTopic(const char *topic1, const char *topic2, const char *topic3);
  * Adding one or more parts to the current topic
  * 
  * @param topic - Topic name
- * @param subtopic - Subtopic name
+ * @param subtopic - Subtopic name 
  * @return - Pointer to a string in heap. Remember to free it after using the function esp_mqtt_free_string() or free();
  * */
 char * mqttGetSubTopic(const char *topic, const char *subtopic);

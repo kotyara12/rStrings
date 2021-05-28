@@ -61,6 +61,7 @@ char * malloc_timestr(const char *format, time_t value)
 // -----------------------------------------------------------------------------------------------------------------------
 
 #define MQTT_SUBTOPIC_TEMPLATE "%s/%s"           // topic + / + subtopic
+
 #if CONFIG_MQTT_LOCATION_ENABLED
 #define MQTT_TOPIC_TEMPLATE_0 "%s%s/%s"          // prefix + location + / + topic (etc: "/village/heater")
 #define MQTT_TOPIC_TEMPLATE_1 "%s%s/%s/%s"       // prefix + location + / + device + / + topic (etc: "/village/heater/status")
