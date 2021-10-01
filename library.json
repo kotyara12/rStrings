@@ -12,5 +12,6 @@
     }
   ],
   "license": "MIT",
-  "frameworks": ["arduino", "espidf"]  
+  "platforms": ["atmelavr", "espressif32", "espressif8266"],
+  "frameworks": ["arduino", "espidf"]
 }

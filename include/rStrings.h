@@ -21,6 +21,11 @@ extern "C" {
 char* malloc_string(const char *source);
 
 /**
+ * Clone a string and allocate a new memory area on the heap
+ * */
+char* malloc_stringl(const char *source, const uint32_t len);
+
+/**
  * Generating a string in heap with formatting
  * */
 char* malloc_stringf(const char *format, ...);
@@ -31,96 +36,6 @@ char* malloc_stringf(const char *format, ...);
 char* malloc_timestr(const char *format, time_t value);
 
 /**
- * Generation of a truncated name of a topic: prefix + location + / + topic 
- * for example: "/home/heater"
- * 
- * Note: mqttGetTopic0 uses values from project_congig.h
- * 
- * @param perfix - Server topic prefix, may be "/" or "" or "user_XXXX" for some servers
- * @param location - Device location, may be "home" or "village"
- * @param topic - Topic name
- * @return - Pointer to a string in heap. Remember to free it after using the function esp_mqtt_free_string() or free();
- * */
-#if CONFIG_MQTT_LOCATION_ENABLED
-char * mqttGetTopicCustom0(const char *perfix, const char *location, const char *topic);
-#else
-char * mqttGetTopicCustom0(const char *perfix, const char *topic);
-#endif // CONFIG_MQTT_LOCATION_ENABLED
-char * mqttGetTopic0(const char *topic);
-
-/**
- * Generation of a name of a topic: prefix + location + / + device + / + topic
- * for example: "/village/heater/status"
- * 
- * Note: mqttGetTopic1 uses values from project_congig.h
- * 
- * @param perfix - Server topic prefix, may be "/" or "" or "user_XXXX" for some servers
- * @param location - Device location, may be "home" or "village"
- * @param device - Esp device name 
- * @param topic - Topic name
- * @return - Pointer to a string in heap. Remember to free it after using the function esp_mqtt_free_string() or free();
- * */
-#if CONFIG_MQTT_LOCATION_ENABLED
-char * mqttGetTopicCustom1(const char *perfix, const char *location, const char *device, const char *topic);
-#else
-char * mqttGetTopicCustom1(const char *perfix, const char *device, const char *topic);
-#endif // CONFIG_MQTT_LOCATION_ENABLED
-char * mqttGetTopic1(const char *topic);
-
-/**
- * Generation of a name of a topic: prefix + location + / + device + / + topic1 + / + topic2
- * for example: "/village/heater/bedroom/temperature"
- * 
- * Note: mqttGetTopic2 uses values from project_congig.h
- * 
- * @param perfix - Server topic prefix, may be "/" or "" or "user_XXXX" for some servers
- * @param location - Device location, may be "home" or "village"
- * @param device - Esp device name 
- * @param topic1 - Topic name
- * @param topic2 - Subtopic name
- * @return - Pointer to a string in heap. Remember to free it after using the function esp_mqtt_free_string() or free();
- * */
-#if CONFIG_MQTT_LOCATION_ENABLED
-char * mqttGetTopicCustom2(const char *perfix, const char *location, const char *device, const char *topic1, const char *topic2);
-#else
-char * mqttGetTopicCustom2(const char *perfix, const char *device, const char *topic1, const char *topic2);
-#endif // CONFIG_MQTT_LOCATION_ENABLED
-char * mqttGetTopic2(const char *topic1, const char *topic2);
-
-/**
- * Generation of a name of a topic: prefix + location + / + device + / + topic1 + / + topic2 + / + topic3
- * for example: "/village/heater/bedroom/temperature/sensor_status"
- * 
- * Note: mqttGetTopic3 uses values from project_congig.h
- * 
- * @param perfix - Server topic prefix, may be "/" or "" or "user_XXXX" for some servers
- * @param location - Device location, may be "home" or "village"
- * @param device - Ssp device name 
- * @param topic1 - Topic name
- * @param topic2 - Subtopic name
- * @param topic3 - Subsubtopic name
- * @return - Pointer to a string in heap. Remember to free it after using the function esp_mqtt_free_string() or free();
- * */
-#if CONFIG_MQTT_LOCATION_ENABLED
-char * mqttGetTopicCustom3(const char *perfix, const char *location, const char *device, const char *topic1, const char *topic2, const char *topic3);
-#else
-char * mqttGetTopicCustom3(const char *perfix, const char *device, const char *topic1, const char *topic2, const char *topic3);
-#endif // CONFIG_MQTT_LOCATION_ENABLED
-char * mqttGetTopic3(const char *topic1, const char *topic2, const char *topic3);
-
-/**
- * Automatic topic generation depending on the number of non-empty components
- * 
- * Note: mqttGetTopic uses values from project_congig.h
- * 
- * @param topic1 - Topic name
- * @param topic2 - Subtopic name (optional)
- * @param topic3 - Subsubtopic name (optional)
- * @return - Pointer to a string in heap. Remember to free it after using the function esp_mqtt_free_string() or free();
- * */
-char * mqttGetTopic(const char *topic1, const char *topic2, const char *topic3);
-
-/**
  * Adding one or more parts to the current topic
  * 
  * @param topic - Topic name
@@ -129,10 +44,78 @@ char * mqttGetTopic(const char *topic1, const char *topic2, const char *topic3);
  * */
 char * mqttGetSubTopic(const char *topic, const char *subtopic);
 
+/**
+ * Generation of a truncated name of a topic: prefix + location + / + topic 
+ * for example: "/home/heater"
+ * 
+ * Note: mqttGetTopic0 uses values from project_congig.h
+ * 
+ * @param primary - Primary or backup MQTT broker
+ * @param local - Local (hidden) topic (available only within this location)
+ * @param topic - Topic name
+ * @return - Pointer to a string in heap. Remember to free it after using the function free(...);
+ * */
+char * mqttGetTopic0(const bool primary, const bool local, const char *topic);
+
+/**
+ * Generation of a name of a topic: prefix + location + / + device + / + topic 
+ * for example: "/home/device/heater"
+ * 
+ * Note: mqttGetTopic1 uses values from project_congig.h
+ * 
+ * @param primary - Primary or backup MQTT broker
+ * @param local - Local (hidden) topic (available only within this location)
+ * @param topic - Topic name
+ * @return - Pointer to a string in heap. Remember to free it after using the function free(...);
+ * */
+char * mqttGetTopic1(const bool primary, const bool local, const char *topic);
+
+/**
+ * Generation of a name of a topic: prefix + location + / + device + / + topic1 + / + topic2
+ * for example: "/village/heater/bedroom/temperature"
+ * 
+ * Note: mqttGetTopic2 uses values from project_congig.h
+ * 
+ * @param primary - Primary or backup MQTT broker
+ * @param local - Local (hidden) topic (available only within this location)
+ * @param topic1 - Topic name
+ * @param topic2 - Subtopic name
+ * @return - Pointer to a string in heap. Remember to free it after using the function free(...);
+ * */
+char * mqttGetTopic2(const bool primary, const bool local, const char *topic1, const char *topic2);
+
+/**
+ * Generation of a name of a topic: prefix + location + / + device + / + topic1 + / + topic2 + / + topic3
+ * for example: "/village/heater/bedroom/temperature/min"
+ * 
+ * Note: mqttGetTopic3 uses values from project_congig.h
+ * 
+ * @param primary - Primary or backup MQTT broker
+ * @param local - Local (hidden) topic (available only within this location)
+ * @param topic1 - Topic name
+ * @param topic2 - Subtopic name
+ * @param topic3 - Subsubtopic name
+ * @return - Pointer to a string in heap. Remember to free it after using the function free(...);
+ * */
+char * mqttGetTopic3(const bool primary, const bool local, const char *topic1, const char *topic2, const char *topic3);
+
+/**
+ * Automatic topic generation depending on the number of non-empty components
+ * 
+ * Note: mqttGetTopic uses values from project_congig.h
+ * 
+ * @param primary - Primary or backup MQTT broker
+ * @param local - Local (hidden) topic (available only within this location)
+ * @param topic1 - Topic name
+ * @param topic2 - Subtopic name (optional)
+ * @param topic3 - Subsubtopic name (optional)
+ * @return - Pointer to a string in heap. Remember to free it after using the function free(...);
+ * */
+char * mqttGetTopic(const bool primary, const bool local, const char *topic1, const char *topic2, const char *topic3);
+
 #ifdef __cplusplus
 }
 #endif
-
 
 #endif // __R_STRINGS_H__
 
