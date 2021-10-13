@@ -45,73 +45,59 @@ char* malloc_timestr(const char *format, time_t value);
 char * mqttGetSubTopic(const char *topic, const char *subtopic);
 
 /**
- * Generation of a truncated name of a topic: prefix + location + / + topic 
+ * Generation of a name of a topic: prefix + location + / + topic 
  * for example: "/home/heater"
  * 
- * Note: mqttGetTopic0 uses values from project_congig.h
+ * Note: mqttGetTopicLocation uses values from project_congig.h
  * 
  * @param primary - Primary or backup MQTT broker
  * @param local - Local (hidden) topic (available only within this location)
  * @param topic - Topic name
+ * @param topic2 - Subtopic name
+ * @param topic3 - Subsubtopic name
  * @return - Pointer to a string in heap. Remember to free it after using the function free(...);
  * */
-char * mqttGetTopic0(const bool primary, const bool local, const char *topic);
+char * mqttGetTopicLocation1(const bool primary, const bool local, const char *topic);
+char * mqttGetTopicLocation2(const bool primary, const bool local, const char *topic1, const char *topic2);
+char * mqttGetTopicLocation3(const bool primary, const bool local, const char *topic1, const char *topic2, const char *topic3);
+char * mqttGetTopicLocation(const bool primary, const bool local, const char *topic1, const char *topic2, const char *topic3);
+
+/**
+ * Generation of a name of a topic: prefix + location + / + special + / + topic 
+ * for example: "/home/custom/heater"
+ * 
+ * Note: mqttGetTopicSpecial uses values from project_congig.h
+ * 
+ * @param primary - Primary or backup MQTT broker
+ * @param local - Local (hidden) topic (available only within this location)
+ * @param device - Special (device) name
+ * @param topic - Topic name
+ * @param topic2 - Subtopic name
+ * @param topic3 - Subsubtopic name
+ * @return - Pointer to a string in heap. Remember to free it after using the function free(...);
+ * */
+char * mqttGetTopicSpecial1(const bool primary, const bool local, const char *special, const char *topic);
+char * mqttGetTopicSpecial2(const bool primary, const bool local, const char *special, const char *topic1, const char *topic2);
+char * mqttGetTopicSpecial3(const bool primary, const bool local, const char *special, const char *topic1, const char *topic2, const char *topic3);
+char * mqttGetTopicSpecial(const bool primary, const bool local, const char *special, const char *topic1, const char *topic2, const char *topic3);
 
 /**
  * Generation of a name of a topic: prefix + location + / + device + / + topic 
  * for example: "/home/device/heater"
  * 
- * Note: mqttGetTopic1 uses values from project_congig.h
+ * Note: mqttGetTopicDevice uses values from project_congig.h
  * 
  * @param primary - Primary or backup MQTT broker
  * @param local - Local (hidden) topic (available only within this location)
  * @param topic - Topic name
- * @return - Pointer to a string in heap. Remember to free it after using the function free(...);
- * */
-char * mqttGetTopic1(const bool primary, const bool local, const char *topic);
-
-/**
- * Generation of a name of a topic: prefix + location + / + device + / + topic1 + / + topic2
- * for example: "/village/heater/bedroom/temperature"
- * 
- * Note: mqttGetTopic2 uses values from project_congig.h
- * 
- * @param primary - Primary or backup MQTT broker
- * @param local - Local (hidden) topic (available only within this location)
- * @param topic1 - Topic name
- * @param topic2 - Subtopic name
- * @return - Pointer to a string in heap. Remember to free it after using the function free(...);
- * */
-char * mqttGetTopic2(const bool primary, const bool local, const char *topic1, const char *topic2);
-
-/**
- * Generation of a name of a topic: prefix + location + / + device + / + topic1 + / + topic2 + / + topic3
- * for example: "/village/heater/bedroom/temperature/min"
- * 
- * Note: mqttGetTopic3 uses values from project_congig.h
- * 
- * @param primary - Primary or backup MQTT broker
- * @param local - Local (hidden) topic (available only within this location)
- * @param topic1 - Topic name
  * @param topic2 - Subtopic name
  * @param topic3 - Subsubtopic name
  * @return - Pointer to a string in heap. Remember to free it after using the function free(...);
  * */
-char * mqttGetTopic3(const bool primary, const bool local, const char *topic1, const char *topic2, const char *topic3);
-
-/**
- * Automatic topic generation depending on the number of non-empty components
- * 
- * Note: mqttGetTopic uses values from project_congig.h
- * 
- * @param primary - Primary or backup MQTT broker
- * @param local - Local (hidden) topic (available only within this location)
- * @param topic1 - Topic name
- * @param topic2 - Subtopic name (optional)
- * @param topic3 - Subsubtopic name (optional)
- * @return - Pointer to a string in heap. Remember to free it after using the function free(...);
- * */
-char * mqttGetTopic(const bool primary, const bool local, const char *topic1, const char *topic2, const char *topic3);
+char * mqttGetTopicDevice1(const bool primary, const bool local, const char *topic);
+char * mqttGetTopicDevice2(const bool primary, const bool local, const char *topic1, const char *topic2);
+char * mqttGetTopicDevice3(const bool primary, const bool local, const char *topic1, const char *topic2, const char *topic3);
+char * mqttGetTopicDevice(const bool primary, const bool local, const char *topic1, const char *topic2, const char *topic3);
 
 #ifdef __cplusplus
 }

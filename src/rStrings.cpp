@@ -82,276 +82,456 @@ char * mqttGetSubTopic(const char *topic, const char *subtopic)
   return malloc_stringf("%s/%s", topic, subtopic);
 }
 
+// 
+// MQTT1 LOCAL
+// 
 #if defined(CONFIG_MQTT1_LOC_PREFIX)
   // PREFIX + ...
   #if defined(CONFIG_MQTT1_LOC_LOCATION)
     // PREFIX + LOCATION + ...
-    #define MQTT1_LOC_HEADER_SHORT CONFIG_MQTT1_LOC_PREFIX CONFIG_MQTT1_LOC_LOCATION "/"
+    #define MQTT1_LOC_HEADER_LOCATION CONFIG_MQTT1_LOC_PREFIX CONFIG_MQTT1_LOC_LOCATION "/"
     #if defined(CONFIG_MQTT1_LOC_DEVICE)
       // PREFIX + LOCATION + "/" + DEVICE + "/"
-      #define MQTT1_LOC_HEADER_FULL CONFIG_MQTT1_LOC_PREFIX CONFIG_MQTT1_LOC_LOCATION "/" CONFIG_MQTT1_LOC_DEVICE "/"
+      #define MQTT1_LOC_HEADER_DEVICE CONFIG_MQTT1_LOC_PREFIX CONFIG_MQTT1_LOC_LOCATION "/" CONFIG_MQTT1_LOC_DEVICE "/"
     #else
       // PREFIX + LOCATION + "/"
-      #define MQTT1_LOC_HEADER_FULL CONFIG_MQTT1_LOC_PREFIX CONFIG_MQTT1_LOC_LOCATION
+      #define MQTT1_LOC_HEADER_DEVICE CONFIG_MQTT1_LOC_PREFIX CONFIG_MQTT1_LOC_LOCATION
     #endif // defined(CONFIG_MQTT1_LOC_DEVICE)
   #else
     // PREFIX + ...
-    #define MQTT1_LOC_HEADER_SHORT CONFIG_MQTT1_LOC_PREFIX
+    #define MQTT1_LOC_HEADER_LOCATION CONFIG_MQTT1_LOC_PREFIX
     #if defined(CONFIG_MQTT1_LOC_DEVICE)
       // PREFIX + DEVICE
-      #define MQTT1_LOC_HEADER_FULL CONFIG_MQTT1_LOC_PREFIX CONFIG_MQTT1_LOC_DEVICE "/"
+      #define MQTT1_LOC_HEADER_DEVICE CONFIG_MQTT1_LOC_PREFIX CONFIG_MQTT1_LOC_DEVICE "/"
     #else
       // PREFIX
-      #define MQTT1_LOC_HEADER_FULL CONFIG_MQTT1_LOC_PREFIX
+      #define MQTT1_LOC_HEADER_DEVICE CONFIG_MQTT1_LOC_PREFIX
     #endif // defined(CONFIG_MQTT1_LOC_DEVICE)
   #endif // defined(CONFIG_MQTT1_LOC_LOCATION)
 #else
   // ...
   #if defined(CONFIG_MQTT1_LOC_LOCATION)
     // LOCATION + ...
-    #define MQTT1_LOC_HEADER_SHORT CONFIG_MQTT1_LOC_LOCATION "/"
+    #define MQTT1_LOC_HEADER_LOCATION CONFIG_MQTT1_LOC_LOCATION "/"
     #if defined(CONFIG_MQTT1_LOC_DEVICE)
       // LOCATION + "/" + DEVICE
-      #define MQTT1_LOC_HEADER_FULL CONFIG_MQTT1_LOC_LOCATION "/" CONFIG_MQTT1_LOC_DEVICE "/"
+      #define MQTT1_LOC_HEADER_DEVICE CONFIG_MQTT1_LOC_LOCATION "/" CONFIG_MQTT1_LOC_DEVICE "/"
     #else
       // LOCATION
-      #define MQTT1_LOC_HEADER_FULL CONFIG_MQTT1_LOC_LOCATION "/"
+      #define MQTT1_LOC_HEADER_DEVICE CONFIG_MQTT1_LOC_LOCATION "/"
     #endif // defined(CONFIG_MQTT1_LOC_DEVICE)
   #else
     // ...
-    #define MQTT1_LOC_HEADER_SHORT ""
+    #define MQTT1_LOC_HEADER_LOCATION ""
     #if defined(CONFIG_MQTT1_LOC_DEVICE)
       // DEVICE
-      #define MQTT1_LOC_HEADER_FULL CONFIG_MQTT1_LOC_DEVICE "/"
+      #define MQTT1_LOC_HEADER_DEVICE CONFIG_MQTT1_LOC_DEVICE "/"
     #else
       // EMPTY
-      #define MQTT1_LOC_HEADER_FULL ""
+      #define MQTT1_LOC_HEADER_DEVICE ""
     #endif // defined(CONFIG_MQTT1_LOC_DEVICE)
   #endif // defined(CONFIG_MQTT1_LOC_LOCATION)
 #endif // defined(CONFIG_MQTT1_LOC_PREFIX)
 
+// 
+// MQTT2 LOCAL
+// 
 #if defined(CONFIG_MQTT2_LOC_PREFIX)
   // PREFIX + ...
   #if defined(CONFIG_MQTT2_LOC_LOCATION)
     // PREFIX + LOCATION + ...
-    #define MQTT2_LOC_HEADER_SHORT CONFIG_MQTT2_LOC_PREFIX CONFIG_MQTT2_LOC_LOCATION "/"
+    #define MQTT2_LOC_HEADER_LOCATION CONFIG_MQTT2_LOC_PREFIX CONFIG_MQTT2_LOC_LOCATION "/"
     #if defined(CONFIG_MQTT2_LOC_DEVICE)
       // PREFIX + LOCATION + "/" + DEVICE + "/"
-      #define MQTT2_LOC_HEADER_FULL CONFIG_MQTT2_LOC_PREFIX CONFIG_MQTT2_LOC_LOCATION "/" CONFIG_MQTT2_LOC_DEVICE "/"
+      #define MQTT2_LOC_HEADER_DEVICE CONFIG_MQTT2_LOC_PREFIX CONFIG_MQTT2_LOC_LOCATION "/" CONFIG_MQTT2_LOC_DEVICE "/"
     #else
       // PREFIX + LOCATION + "/"
-      #define MQTT2_LOC_HEADER_FULL CONFIG_MQTT2_LOC_PREFIX CONFIG_MQTT2_LOC_LOCATION
+      #define MQTT2_LOC_HEADER_DEVICE CONFIG_MQTT2_LOC_PREFIX CONFIG_MQTT2_LOC_LOCATION
     #endif // defined(CONFIG_MQTT2_LOC_DEVICE)
   #else
     // PREFIX + ...
-    #define MQTT2_LOC_HEADER_SHORT CONFIG_MQTT2_LOC_PREFIX
+    #define MQTT2_LOC_HEADER_LOCATION CONFIG_MQTT2_LOC_PREFIX
     #if defined(CONFIG_MQTT2_LOC_DEVICE)
       // PREFIX + DEVICE
-      #define MQTT2_LOC_HEADER_FULL CONFIG_MQTT2_LOC_PREFIX CONFIG_MQTT2_LOC_DEVICE "/"
+      #define MQTT2_LOC_HEADER_DEVICE CONFIG_MQTT2_LOC_PREFIX CONFIG_MQTT2_LOC_DEVICE "/"
     #else
       // PREFIX
-      #define MQTT2_LOC_HEADER_FULL CONFIG_MQTT2_LOC_PREFIX
+      #define MQTT2_LOC_HEADER_DEVICE CONFIG_MQTT2_LOC_PREFIX
     #endif // defined(CONFIG_MQTT2_LOC_DEVICE)
   #endif // defined(CONFIG_MQTT2_LOC_LOCATION)
 #else
   // ...
   #if defined(CONFIG_MQTT2_LOC_LOCATION)
     // LOCATION + ...
-    #define MQTT2_LOC_HEADER_SHORT CONFIG_MQTT2_LOC_LOCATION "/"
+    #define MQTT2_LOC_HEADER_LOCATION CONFIG_MQTT2_LOC_LOCATION "/"
     #if defined(CONFIG_MQTT2_LOC_DEVICE)
       // LOCATION + "/" + DEVICE
-      #define MQTT2_LOC_HEADER_FULL CONFIG_MQTT2_LOC_LOCATION "/" CONFIG_MQTT2_LOC_DEVICE "/"
+      #define MQTT2_LOC_HEADER_DEVICE CONFIG_MQTT2_LOC_LOCATION "/" CONFIG_MQTT2_LOC_DEVICE "/"
     #else
       // LOCATION
-      #define MQTT2_LOC_HEADER_FULL CONFIG_MQTT2_LOC_LOCATION "/"
+      #define MQTT2_LOC_HEADER_DEVICE CONFIG_MQTT2_LOC_LOCATION "/"
     #endif // defined(CONFIG_MQTT2_LOC_DEVICE)
   #else
     // ...
-    #define MQTT2_LOC_HEADER_SHORT ""
+    #define MQTT2_LOC_HEADER_LOCATION ""
     #if defined(CONFIG_MQTT2_LOC_DEVICE)
       // DEVICE
-      #define MQTT2_LOC_HEADER_FULL CONFIG_MQTT2_LOC_DEVICE "/"
+      #define MQTT2_LOC_HEADER_DEVICE CONFIG_MQTT2_LOC_DEVICE "/"
     #else
       // EMPTY
-      #define MQTT2_LOC_HEADER_FULL ""
+      #define MQTT2_LOC_HEADER_DEVICE ""
     #endif // defined(CONFIG_MQTT2_LOC_DEVICE)
   #endif // defined(CONFIG_MQTT2_LOC_LOCATION)
 #endif // defined(CONFIG_MQTT2_LOC_PREFIX)
 
+// 
+// MQTT1 PUBLIC
+// 
 #if defined(CONFIG_MQTT1_PUB_PREFIX)
   // PREFIX + ...
   #if defined(CONFIG_MQTT1_PUB_LOCATION)
     // PREFIX + LOCATION + ...
-    #define MQTT1_PUB_HEADER_SHORT CONFIG_MQTT1_PUB_PREFIX CONFIG_MQTT1_PUB_LOCATION "/"
+    #define MQTT1_PUB_HEADER_LOCATION CONFIG_MQTT1_PUB_PREFIX CONFIG_MQTT1_PUB_LOCATION "/"
     #if defined(CONFIG_MQTT1_PUB_DEVICE)
       // PREFIX + LOCATION + "/" + DEVICE + "/"
-      #define MQTT1_PUB_HEADER_FULL CONFIG_MQTT1_PUB_PREFIX CONFIG_MQTT1_PUB_LOCATION "/" CONFIG_MQTT1_PUB_DEVICE "/"
+      #define MQTT1_PUB_HEADER_DEVICE CONFIG_MQTT1_PUB_PREFIX CONFIG_MQTT1_PUB_LOCATION "/" CONFIG_MQTT1_PUB_DEVICE "/"
     #else
       // PREFIX + LOCATION + "/"
-      #define MQTT1_PUB_HEADER_FULL CONFIG_MQTT1_PUB_PREFIX CONFIG_MQTT1_PUB_LOCATION
+      #define MQTT1_PUB_HEADER_DEVICE CONFIG_MQTT1_PUB_PREFIX CONFIG_MQTT1_PUB_LOCATION
     #endif // defined(CONFIG_MQTT1_PUB_DEVICE)
   #else
     // PREFIX + ...
-    #define MQTT1_PUB_HEADER_SHORT CONFIG_MQTT1_PUB_PREFIX
+    #define MQTT1_PUB_HEADER_LOCATION CONFIG_MQTT1_PUB_PREFIX
     #if defined(CONFIG_MQTT1_PUB_DEVICE)
       // PREFIX + DEVICE
-      #define MQTT1_PUB_HEADER_FULL CONFIG_MQTT1_PUB_PREFIX CONFIG_MQTT1_PUB_DEVICE "/"
+      #define MQTT1_PUB_HEADER_DEVICE CONFIG_MQTT1_PUB_PREFIX CONFIG_MQTT1_PUB_DEVICE "/"
     #else
       // PREFIX
-      #define MQTT1_PUB_HEADER_FULL CONFIG_MQTT1_PUB_PREFIX
+      #define MQTT1_PUB_HEADER_DEVICE CONFIG_MQTT1_PUB_PREFIX
     #endif // defined(CONFIG_MQTT1_PUB_DEVICE)
   #endif // defined(CONFIG_MQTT1_PUB_LOCATION)
 #else
   // ...
   #if defined(CONFIG_MQTT1_PUB_LOCATION)
     // LOCATION + ...
-    #define MQTT1_PUB_HEADER_SHORT CONFIG_MQTT1_PUB_LOCATION "/"
+    #define MQTT1_PUB_HEADER_LOCATION CONFIG_MQTT1_PUB_LOCATION "/"
     #if defined(CONFIG_MQTT1_PUB_DEVICE)
       // LOCATION + "/" + DEVICE
-      #define MQTT1_PUB_HEADER_FULL CONFIG_MQTT1_PUB_LOCATION "/" CONFIG_MQTT1_PUB_DEVICE "/"
+      #define MQTT1_PUB_HEADER_DEVICE CONFIG_MQTT1_PUB_LOCATION "/" CONFIG_MQTT1_PUB_DEVICE "/"
     #else
       // LOCATION
-      #define MQTT1_PUB_HEADER_FULL CONFIG_MQTT1_PUB_LOCATION "/"
+      #define MQTT1_PUB_HEADER_DEVICE CONFIG_MQTT1_PUB_LOCATION "/"
     #endif // defined(CONFIG_MQTT1_PUB_DEVICE)
   #else
     // ...
-    #define MQTT1_PUB_HEADER_SHORT ""
+    #define MQTT1_PUB_HEADER_LOCATION ""
     #if defined(CONFIG_MQTT1_PUB_DEVICE)
       // DEVICE
-      #define MQTT1_PUB_HEADER_FULL CONFIG_MQTT1_PUB_DEVICE "/"
+      #define MQTT1_PUB_HEADER_DEVICE CONFIG_MQTT1_PUB_DEVICE "/"
     #else
       // EMPTY
-      #define MQTT1_PUB_HEADER_FULL ""
+      #define MQTT1_PUB_HEADER_DEVICE ""
     #endif // defined(CONFIG_MQTT1_PUB_DEVICE)
   #endif // defined(CONFIG_MQTT1_PUB_LOCATION)
 #endif // defined(CONFIG_MQTT1_PUB_PREFIX)
 
+// 
+// MQTT2 PUBLIC
+// 
 #if defined(CONFIG_MQTT2_PUB_PREFIX)
   // PREFIX + ...
   #if defined(CONFIG_MQTT2_PUB_LOCATION)
     // PREFIX + LOCATION + ...
-    #define MQTT2_PUB_HEADER_SHORT CONFIG_MQTT2_PUB_PREFIX CONFIG_MQTT2_PUB_LOCATION "/"
+    #define MQTT2_PUB_HEADER_LOCATION CONFIG_MQTT2_PUB_PREFIX CONFIG_MQTT2_PUB_LOCATION "/"
     #if defined(CONFIG_MQTT2_PUB_DEVICE)
       // PREFIX + LOCATION + "/" + DEVICE + "/"
-      #define MQTT2_PUB_HEADER_FULL CONFIG_MQTT2_PUB_PREFIX CONFIG_MQTT2_PUB_LOCATION "/" CONFIG_MQTT2_PUB_DEVICE "/"
+      #define MQTT2_PUB_HEADER_DEVICE CONFIG_MQTT2_PUB_PREFIX CONFIG_MQTT2_PUB_LOCATION "/" CONFIG_MQTT2_PUB_DEVICE "/"
     #else
       // PREFIX + LOCATION + "/"
-      #define MQTT2_PUB_HEADER_FULL CONFIG_MQTT2_PUB_PREFIX CONFIG_MQTT2_PUB_LOCATION
+      #define MQTT2_PUB_HEADER_DEVICE CONFIG_MQTT2_PUB_PREFIX CONFIG_MQTT2_PUB_LOCATION
     #endif // defined(CONFIG_MQTT2_PUB_DEVICE)
   #else
     // PREFIX + ...
-    #define MQTT2_PUB_HEADER_SHORT CONFIG_MQTT2_PUB_PREFIX
+    #define MQTT2_PUB_HEADER_LOCATION CONFIG_MQTT2_PUB_PREFIX
     #if defined(CONFIG_MQTT2_PUB_DEVICE)
       // PREFIX + DEVICE
-      #define MQTT2_PUB_HEADER_FULL CONFIG_MQTT2_PUB_PREFIX CONFIG_MQTT2_PUB_DEVICE "/"
+      #define MQTT2_PUB_HEADER_DEVICE CONFIG_MQTT2_PUB_PREFIX CONFIG_MQTT2_PUB_DEVICE "/"
     #else
       // PREFIX
-      #define MQTT2_PUB_HEADER_FULL CONFIG_MQTT2_PUB_PREFIX
+      #define MQTT2_PUB_HEADER_DEVICE CONFIG_MQTT2_PUB_PREFIX
     #endif // defined(CONFIG_MQTT2_PUB_DEVICE)
   #endif // defined(CONFIG_MQTT2_PUB_LOCATION)
 #else
   // ...
   #if defined(CONFIG_MQTT2_PUB_LOCATION)
     // LOCATION + ...
-    #define MQTT2_PUB_HEADER_SHORT CONFIG_MQTT2_PUB_LOCATION "/"
+    #define MQTT2_PUB_HEADER_LOCATION CONFIG_MQTT2_PUB_LOCATION "/"
     #if defined(CONFIG_MQTT2_PUB_DEVICE)
       // LOCATION + "/" + DEVICE
-      #define MQTT2_PUB_HEADER_FULL CONFIG_MQTT2_PUB_LOCATION "/" CONFIG_MQTT2_PUB_DEVICE "/"
+      #define MQTT2_PUB_HEADER_DEVICE CONFIG_MQTT2_PUB_LOCATION "/" CONFIG_MQTT2_PUB_DEVICE "/"
     #else
       // LOCATION
-      #define MQTT2_PUB_HEADER_FULL CONFIG_MQTT2_PUB_LOCATION "/"
+      #define MQTT2_PUB_HEADER_DEVICE CONFIG_MQTT2_PUB_LOCATION "/"
     #endif // defined(CONFIG_MQTT2_PUB_DEVICE)
   #else
     // ...
-    #define MQTT2_PUB_HEADER_SHORT ""
+    #define MQTT2_PUB_HEADER_LOCATION ""
     #if defined(CONFIG_MQTT2_PUB_DEVICE)
       // DEVICE
-      #define MQTT2_PUB_HEADER_FULL CONFIG_MQTT2_PUB_DEVICE "/"
+      #define MQTT2_PUB_HEADER_DEVICE CONFIG_MQTT2_PUB_DEVICE "/"
     #else
       // EMPTY
-      #define MQTT2_PUB_HEADER_FULL ""
+      #define MQTT2_PUB_HEADER_DEVICE ""
     #endif // defined(CONFIG_MQTT2_PUB_DEVICE)
   #endif // defined(CONFIG_MQTT2_PUB_LOCATION)
 #endif // defined(CONFIG_MQTT2_PUB_PREFIX)
 
-char * mqttGetTopic0(const bool primary, const bool local, const char *topic)
+// Generation of a name of a topic: prefix + location + / + topic 
+char * mqttGetTopicLocation1(const bool primary, const bool local, const char *topic)
 {
   if (local) {
     if (primary) {
-      return malloc_stringf("%s%s", MQTT1_LOC_HEADER_SHORT, topic);
+      return malloc_stringf("%s%s", MQTT1_LOC_HEADER_LOCATION, topic);
     } else {
-      return malloc_stringf("%s%s", MQTT2_LOC_HEADER_SHORT, topic);
+      return malloc_stringf("%s%s", MQTT2_LOC_HEADER_LOCATION, topic);
     };
   } else {
     if (primary) {
-      return malloc_stringf("%s%s", MQTT1_PUB_HEADER_SHORT, topic);
+      return malloc_stringf("%s%s", MQTT1_PUB_HEADER_LOCATION, topic);
     } else {
-      return malloc_stringf("%s%s", MQTT2_PUB_HEADER_SHORT, topic);
+      return malloc_stringf("%s%s", MQTT2_PUB_HEADER_LOCATION, topic);
     };
   };
 }
 
-char * mqttGetTopic1(const bool primary, const bool local, const char *topic)
+char * mqttGetTopicLocation2(const bool primary, const bool local, const char *topic1, const char *topic2)
 {
   if (local) {
     if (primary) {
-      return malloc_stringf("%s%s", MQTT1_LOC_HEADER_FULL, topic);
+      return malloc_stringf("%s%s/%s", MQTT1_LOC_HEADER_LOCATION, topic1, topic2);
     } else {
-      return malloc_stringf("%s%s", MQTT2_LOC_HEADER_FULL, topic);
+      return malloc_stringf("%s%s/%s", MQTT2_LOC_HEADER_LOCATION, topic1, topic2);
     };
   } else {
     if (primary) {
-      return malloc_stringf("%s%s", MQTT1_PUB_HEADER_FULL, topic);
+      return malloc_stringf("%s%s/%s", MQTT1_PUB_HEADER_LOCATION, topic1, topic2);
     } else {
-      return malloc_stringf("%s%s", MQTT2_PUB_HEADER_FULL, topic);
+      return malloc_stringf("%s%s/%s", MQTT2_PUB_HEADER_LOCATION, topic1, topic2);
     };
   };
 }
 
-char * mqttGetTopic2(const bool primary, const bool local, const char *topic1, const char *topic2)
+char * mqttGetTopicLocation3(const bool primary, const bool local, const char *topic1, const char *topic2, const char *topic3)
 {
   if (local) {
     if (primary) {
-      return malloc_stringf("%s%s/%s", MQTT1_LOC_HEADER_FULL, topic1, topic2);
+      return malloc_stringf("%s%s/%s/%s", MQTT1_LOC_HEADER_LOCATION, topic1, topic2, topic3);
     } else {
-      return malloc_stringf("%s%s/%s", MQTT2_LOC_HEADER_FULL, topic1, topic2);
+      return malloc_stringf("%s%s/%s/%s", MQTT2_LOC_HEADER_LOCATION, topic1, topic2, topic3);
     };
   } else {
     if (primary) {
-      return malloc_stringf("%s%s/%s", MQTT1_PUB_HEADER_FULL, topic1, topic2);
+      return malloc_stringf("%s%s/%s/%s", MQTT1_PUB_HEADER_LOCATION, topic1, topic2, topic3);
     } else {
-      return malloc_stringf("%s%s/%s", MQTT2_PUB_HEADER_FULL, topic1, topic2);
+      return malloc_stringf("%s%s/%s/%s", MQTT2_PUB_HEADER_LOCATION, topic1, topic2, topic3);
     };
   };
 }
 
-char * mqttGetTopic3(const bool primary, const bool local, const char *topic1, const char *topic2, const char *topic3)
-{
-  if (local) {
-    if (primary) {
-      return malloc_stringf("%s%s/%s/%s", MQTT1_LOC_HEADER_FULL, topic1, topic2, topic3);
-    } else {
-      return malloc_stringf("%s%s/%s/%s", MQTT2_LOC_HEADER_FULL, topic1, topic2, topic3);
-    };
-  } else {
-    if (primary) {
-      return malloc_stringf("%s%s/%s/%s", MQTT1_PUB_HEADER_FULL, topic1, topic2, topic3);
-    } else {
-      return malloc_stringf("%s%s/%s/%s", MQTT2_PUB_HEADER_FULL, topic1, topic2, topic3);
-    };
-  };
-}
-
-char * mqttGetTopic(const bool primary, const bool local, const char *topic1, const char *topic2, const char *topic3)
+char * mqttGetTopicLocation(const bool primary, const bool local, const char *topic1, const char *topic2, const char *topic3)
 {
   if (topic3) {
-    return mqttGetTopic3(primary, local, topic1, topic2, topic3);
+    return mqttGetTopicLocation3(primary, local, topic1, topic2, topic3);
   }
   else if (topic2) {
-    return mqttGetTopic2(primary, local, topic1, topic2);
+    return mqttGetTopicLocation2(primary, local, topic1, topic2);
   }
   else if (topic1) {
-    return mqttGetTopic1(primary, local, topic1);
+    return mqttGetTopicLocation1(primary, local, topic1);
+  }
+  else {
+    return nullptr;
+  }
+}
+
+// Generation of a name of a topic: prefix + location + / + special + / + topic 
+char * mqttGetTopicSpecial1(const bool primary, const bool local, const char *special, const char *topic)
+{
+  if (special) {
+    if (local) {
+      if (primary) {
+        return malloc_stringf("%s%s/%s", MQTT1_LOC_HEADER_LOCATION, special, topic);
+      } else {
+        return malloc_stringf("%s%s/%s", MQTT2_LOC_HEADER_LOCATION, special, topic);
+      };
+    } else {
+      if (primary) {
+        return malloc_stringf("%s%s/%s", MQTT1_PUB_HEADER_LOCATION, special, topic);
+      } else {
+        return malloc_stringf("%s%s/%s", MQTT2_PUB_HEADER_LOCATION, special, topic);
+      };
+    };
+  } else {
+    if (local) {
+      if (primary) {
+        return malloc_stringf("%s%s", MQTT1_LOC_HEADER_LOCATION, topic);
+      } else {
+        return malloc_stringf("%s%s", MQTT2_LOC_HEADER_LOCATION, topic);
+      };
+    } else {
+      if (primary) {
+        return malloc_stringf("%s%s", MQTT1_PUB_HEADER_LOCATION, topic);
+      } else {
+        return malloc_stringf("%s%s", MQTT2_PUB_HEADER_LOCATION, topic);
+      };
+    };
+  };
+}
+
+char * mqttGetTopicSpecial2(const bool primary, const bool local, const char *special, const char *topic1, const char *topic2)
+{
+  if (special) {
+    if (local) {
+      if (primary) {
+        return malloc_stringf("%s%s/%s/%s", MQTT1_LOC_HEADER_LOCATION, special, topic1, topic2);
+      } else {
+        return malloc_stringf("%s%s/%s/%s", MQTT2_LOC_HEADER_LOCATION, special, topic1, topic2);
+      };
+    } else {
+      if (primary) {
+        return malloc_stringf("%s%s/%s/%s", MQTT1_PUB_HEADER_LOCATION, special, topic1, topic2);
+      } else {
+        return malloc_stringf("%s%s/%s/%s", MQTT2_PUB_HEADER_LOCATION, special, topic1, topic2);
+      };
+    };
+  } else {
+    if (local) {
+      if (primary) {
+        return malloc_stringf("%s%s/%s", MQTT1_LOC_HEADER_LOCATION, topic1, topic2);
+      } else {
+        return malloc_stringf("%s%s/%s", MQTT2_LOC_HEADER_LOCATION, topic1, topic2);
+      };
+    } else {
+      if (primary) {
+        return malloc_stringf("%s%s/%s", MQTT1_PUB_HEADER_LOCATION, topic1, topic2);
+      } else {
+        return malloc_stringf("%s%s/%s", MQTT2_PUB_HEADER_LOCATION, topic1, topic2);
+      };
+    };
+  };
+}
+
+char * mqttGetTopicSpecial3(const bool primary, const bool local, const char *special, const char *topic1, const char *topic2, const char *topic3)
+{
+  if (special) {
+    if (local) {
+      if (primary) {
+        return malloc_stringf("%s%s/%s/%s/%s", MQTT1_LOC_HEADER_LOCATION, special, topic1, topic2, topic3);
+      } else {
+        return malloc_stringf("%s%s/%s/%s/%s", MQTT2_LOC_HEADER_LOCATION, special, topic1, topic2, topic3);
+      };
+    } else {
+      if (primary) {
+        return malloc_stringf("%s%s/%s/%s/%s", MQTT1_PUB_HEADER_LOCATION, special, topic1, topic2, topic3);
+      } else {
+        return malloc_stringf("%s%s/%s/%s/%s", MQTT2_PUB_HEADER_LOCATION, special, topic1, topic2, topic3);
+      };
+    };
+  } else {
+    if (local) {
+      if (primary) {
+        return malloc_stringf("%s%s/%s/%s", MQTT1_LOC_HEADER_LOCATION, topic1, topic2, topic3);
+      } else {
+        return malloc_stringf("%s%s/%s/%s", MQTT2_LOC_HEADER_LOCATION, topic1, topic2, topic3);
+      };
+    } else {
+      if (primary) {
+        return malloc_stringf("%s%s/%s/%s", MQTT1_PUB_HEADER_LOCATION, topic1, topic2, topic3);
+      } else {
+        return malloc_stringf("%s%s/%s/%s", MQTT2_PUB_HEADER_LOCATION, topic1, topic2, topic3);
+      };
+    };
+  };
+}
+
+char * mqttGetTopicSpecial(const bool primary, const bool local, const char *special, const char *topic1, const char *topic2, const char *topic3)
+{
+  if (topic3) {
+    return mqttGetTopicSpecial3(primary, local, special, topic1, topic2, topic3);
+  }
+  else if (topic2) {
+    return mqttGetTopicSpecial2(primary, local, special, topic1, topic2);
+  }
+  else if (topic1) {
+    return mqttGetTopicSpecial1(primary, local, special, topic1);
+  }
+  else {
+    return nullptr;
+  }
+}
+
+// Generation of a name of a topic: prefix + location + / + device + / + topic 
+char * mqttGetTopicDevice1(const bool primary, const bool local, const char *topic)
+{
+  if (local) {
+    if (primary) {
+      return malloc_stringf("%s%s", MQTT1_LOC_HEADER_DEVICE, topic);
+    } else {
+      return malloc_stringf("%s%s", MQTT2_LOC_HEADER_DEVICE, topic);
+    };
+  } else {
+    if (primary) {
+      return malloc_stringf("%s%s", MQTT1_PUB_HEADER_DEVICE, topic);
+    } else {
+      return malloc_stringf("%s%s", MQTT2_PUB_HEADER_DEVICE, topic);
+    };
+  };
+}
+
+char * mqttGetTopicDevice2(const bool primary, const bool local, const char *topic1, const char *topic2)
+{
+  if (local) {
+    if (primary) {
+      return malloc_stringf("%s%s/%s", MQTT1_LOC_HEADER_DEVICE, topic1, topic2);
+    } else {
+      return malloc_stringf("%s%s/%s", MQTT2_LOC_HEADER_DEVICE, topic1, topic2);
+    };
+  } else {
+    if (primary) {
+      return malloc_stringf("%s%s/%s", MQTT1_PUB_HEADER_DEVICE, topic1, topic2);
+    } else {
+      return malloc_stringf("%s%s/%s", MQTT2_PUB_HEADER_DEVICE, topic1, topic2);
+    };
+  };
+}
+
+char * mqttGetTopicDevice3(const bool primary, const bool local, const char *topic1, const char *topic2, const char *topic3)
+{
+  if (local) {
+    if (primary) {
+      return malloc_stringf("%s%s/%s/%s", MQTT1_LOC_HEADER_DEVICE, topic1, topic2, topic3);
+    } else {
+      return malloc_stringf("%s%s/%s/%s", MQTT2_LOC_HEADER_DEVICE, topic1, topic2, topic3);
+    };
+  } else {
+    if (primary) {
+      return malloc_stringf("%s%s/%s/%s", MQTT1_PUB_HEADER_DEVICE, topic1, topic2, topic3);
+    } else {
+      return malloc_stringf("%s%s/%s/%s", MQTT2_PUB_HEADER_DEVICE, topic1, topic2, topic3);
+    };
+  };
+}
+
+char * mqttGetTopicDevice(const bool primary, const bool local, const char *topic1, const char *topic2, const char *topic3)
+{
+  if (topic3) {
+    return mqttGetTopicDevice3(primary, local, topic1, topic2, topic3);
+  }
+  else if (topic2) {
+    return mqttGetTopicDevice2(primary, local, topic1, topic2);
+  }
+  else if (topic1) {
+    return mqttGetTopicDevice1(primary, local, topic1);
   }
   else {
     return nullptr;
