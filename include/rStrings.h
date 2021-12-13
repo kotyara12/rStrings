@@ -36,6 +36,16 @@ char* malloc_stringf(const char *format, ...);
 char* malloc_timestr(const char *format, time_t value);
 
 /**
+ * Generating a heap string containing a textual representation of a time interval in hours, minutes, and seconds
+ * */
+char * malloc_timespan_hms(time_t value);
+
+/**
+ * Generating a heap string containing a textual representation of a time interval in days, hours, minutes, and seconds
+ * */
+char * malloc_timespan_dhms(time_t value);
+
+/**
  * Adding one or more parts to the current topic
  * 
  * @param topic - Topic name

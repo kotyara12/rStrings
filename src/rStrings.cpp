@@ -73,6 +73,26 @@ char * malloc_timestr(const char *format, time_t value)
   return malloc_string(buffer);
 }
 
+char * malloc_timespan_hms(time_t value)
+{
+  uint16_t h = value / 3600;
+  uint16_t m = value % 3600 / 60;
+  uint16_t s = value % 3600 % 60;
+
+  return malloc_stringf("%.2d:%.2d:%.2d", h, m, s);
+}
+
+char * malloc_timespan_dhms(time_t value)
+{
+  uint16_t d = value / 86400;
+  uint16_t h = value % 86400 / 3600;
+  uint16_t m = value % 86400 % 3600 / 60;
+  uint16_t s = value % 86400 % 3600 % 60;
+
+  return malloc_stringf("%d.%.2d:%.2d:%.2d", d, h, m, s);
+}
+
+
 // -----------------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------- Create topics ------------------------------------------------------
 // -----------------------------------------------------------------------------------------------------------------------
