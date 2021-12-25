@@ -73,6 +73,20 @@ char * malloc_timestr(const char *format, time_t value)
   return malloc_string(buffer);
 }
 
+char * malloc_timestr_empty(const char *format, time_t value)
+{
+  if (value > 0) {
+    struct tm timeinfo;
+    char buffer[64];
+    memset(&buffer, 0, sizeof(buffer));
+    localtime_r(&value, &timeinfo);
+    strftime(buffer, sizeof(buffer), format, &timeinfo);
+    return malloc_string(buffer);
+  } else {
+    return malloc_string("---");
+  }
+}
+
 char * malloc_timespan_hms(time_t value)
 {
   uint16_t h = value / 3600;

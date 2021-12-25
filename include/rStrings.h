@@ -34,6 +34,7 @@ char* malloc_stringf(const char *format, ...);
  * Generating a heap string containing a textual representation of the date and time
  * */
 char* malloc_timestr(const char *format, time_t value);
+char* malloc_timestr_empty(const char *format, time_t value);
 
 /**
  * Generating a heap string containing a textual representation of a time interval in hours, minutes, and seconds
