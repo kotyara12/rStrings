@@ -103,11 +103,13 @@ char * mqttGetTopicSpecial(const bool primary, const bool local, const char *spe
  * @param topic - Topic name
  * @param topic2 - Subtopic name
  * @param topic3 - Subsubtopic name
+ * @param topic4 - Subsubsubtopic name
  * @return - Pointer to a string in heap. Remember to free it after using the function free(...);
  * */
 char * mqttGetTopicDevice1(const bool primary, const bool local, const char *topic);
 char * mqttGetTopicDevice2(const bool primary, const bool local, const char *topic1, const char *topic2);
 char * mqttGetTopicDevice3(const bool primary, const bool local, const char *topic1, const char *topic2, const char *topic3);
+char * mqttGetTopicDevice4(const bool primary, const bool local, const char *topic1, const char *topic2, const char *topic3, const char *topic4);
 char * mqttGetTopicDevice(const bool primary, const bool local, const char *topic1, const char *topic2, const char *topic3);
 
 #ifdef __cplusplus

@@ -556,6 +556,23 @@ char * mqttGetTopicDevice3(const bool primary, const bool local, const char *top
   };
 }
 
+char * mqttGetTopicDevice4(const bool primary, const bool local, const char *topic1, const char *topic2, const char *topic3, const char *topic4)
+{
+  if (local) {
+    if (primary) {
+      return malloc_stringf("%s%s/%s/%s/%s", MQTT1_LOC_HEADER_DEVICE, topic1, topic2, topic3, topic4);
+    } else {
+      return malloc_stringf("%s%s/%s/%s/%s", MQTT2_LOC_HEADER_DEVICE, topic1, topic2, topic3, topic4);
+    };
+  } else {
+    if (primary) {
+      return malloc_stringf("%s%s/%s/%s/%s", MQTT1_PUB_HEADER_DEVICE, topic1, topic2, topic3, topic4);
+    } else {
+      return malloc_stringf("%s%s/%s/%s/%s", MQTT2_PUB_HEADER_DEVICE, topic1, topic2, topic3, topic4);
+    };
+  };
+}
+
 char * mqttGetTopicDevice(const bool primary, const bool local, const char *topic1, const char *topic2, const char *topic3)
 {
   if (topic3) {
