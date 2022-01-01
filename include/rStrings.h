@@ -85,11 +85,14 @@ char * mqttGetTopicLocation(const bool primary, const bool local, const char *to
  * @param topic - Topic name
  * @param topic2 - Subtopic name
  * @param topic3 - Subsubtopic name
+ * @param topic4 - Subsubsubtopic name
  * @return - Pointer to a string in heap. Remember to free it after using the function free(...);
  * */
 char * mqttGetTopicSpecial1(const bool primary, const bool local, const char *special, const char *topic);
 char * mqttGetTopicSpecial2(const bool primary, const bool local, const char *special, const char *topic1, const char *topic2);
 char * mqttGetTopicSpecial3(const bool primary, const bool local, const char *special, const char *topic1, const char *topic2, const char *topic3);
+char * mqttGetTopicSpecial4(const bool primary, const bool local, const char *special, const char *topic1, const char *topic2, const char *topic3, const char *topic4);
+char * mqttGetTopicSpecial5(const bool primary, const bool local, const char *special, const char *topic1, const char *topic2, const char *topic3, const char *topic4, const char *topic5);
 char * mqttGetTopicSpecial(const bool primary, const bool local, const char *special, const char *topic1, const char *topic2, const char *topic3);
 
 /**
@@ -104,12 +107,14 @@ char * mqttGetTopicSpecial(const bool primary, const bool local, const char *spe
  * @param topic2 - Subtopic name
  * @param topic3 - Subsubtopic name
  * @param topic4 - Subsubsubtopic name
+ * @param topic5 - Subsubsubsubtopic name
  * @return - Pointer to a string in heap. Remember to free it after using the function free(...);
  * */
 char * mqttGetTopicDevice1(const bool primary, const bool local, const char *topic);
 char * mqttGetTopicDevice2(const bool primary, const bool local, const char *topic1, const char *topic2);
 char * mqttGetTopicDevice3(const bool primary, const bool local, const char *topic1, const char *topic2, const char *topic3);
 char * mqttGetTopicDevice4(const bool primary, const bool local, const char *topic1, const char *topic2, const char *topic3, const char *topic4);
+char * mqttGetTopicDevice5(const bool primary, const bool local, const char *topic1, const char *topic2, const char *topic3, const char *topic4, const char *topic5);
 char * mqttGetTopicDevice(const bool primary, const bool local, const char *topic1, const char *topic2, const char *topic3);
 
 #ifdef __cplusplus
