@@ -1,5 +1,6 @@
 #include "rStrings.h"
 #include "rLog.h"
+#include "reEsp32.h"
 #include "project_config.h"
 #include <stdio.h>
 #include <stdarg.h>
@@ -15,7 +16,7 @@ static const char * tagHEAP = "OUT OF MEMORY";
 char * malloc_string(const char *source) 
 {
   uint32_t len = strlen(source);
-  char *ret = (char*)malloc(len+1);
+  char *ret = (char*)esp_malloc(len+1);
   if (!ret) {
     rlog_e(tagHEAP, "Out of memory!");
     // ledSysStateSet(SYSLED_ERROR, false);
@@ -28,7 +29,7 @@ char * malloc_string(const char *source)
 
 char * malloc_stringl(const char *source, const uint32_t len) 
 {
-  char *ret = (char*)malloc(len+1);
+  char *ret = (char*)esp_malloc(len+1);
   if (!ret) {
     rlog_e(tagHEAP, "Out of memory!");
     // ledSysStateSet(SYSLED_ERROR, false);
@@ -50,7 +51,7 @@ char * malloc_stringf(const char *format, ...)
   // calculate length of resulting string
   len = vsnprintf(NULL, 0, format, args);
   // allocate memory for string
-  ret = (char*)malloc(len+1);
+  ret = (char*)esp_malloc(len+1);
   if (ret) {
     memset(ret, 0, len+1);
     // get resulting string into buffer
