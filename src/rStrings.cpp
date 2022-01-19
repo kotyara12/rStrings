@@ -2,6 +2,7 @@
 #include "rLog.h"
 #include "reEsp32.h"
 #include "project_config.h"
+#include "def_consts.h"
 #include <stdio.h>
 #include <stdarg.h>
 #include <stdlib.h>
@@ -64,10 +65,31 @@ char * malloc_stringf(const char *format, ...)
   return ret;
 }
 
+size_t time2str(const char *format, time_t value, char* buffer, size_t buffer_size)
+{
+  struct tm timeinfo;
+  memset(&buffer, 0, buffer_size);
+  localtime_r(&value, &timeinfo);
+  return strftime(buffer, buffer_size, format, &timeinfo);
+}
+
+size_t time2str_empty(const char *format, time_t value, char* buffer, size_t buffer_size)
+{
+  if (value > 0) {
+    struct tm timeinfo;
+    memset(&buffer, 0, buffer_size);
+    localtime_r(&value, &timeinfo);
+    return strftime(buffer, buffer_size, format, &timeinfo);
+  } else {
+    strcpy(buffer, CONFIG_FORMAT_EMPTY_DATETIME);
+    return strlen(CONFIG_FORMAT_EMPTY_DATETIME);
+  };
+}
+
 char * malloc_timestr(const char *format, time_t value)
 {
   struct tm timeinfo;
-  char buffer[64];
+  char buffer[CONFIG_FORMAT_STRFTIME_BUFFER_SIZE];
   memset(&buffer, 0, sizeof(buffer));
   localtime_r(&value, &timeinfo);
   strftime(buffer, sizeof(buffer), format, &timeinfo);
@@ -78,13 +100,13 @@ char * malloc_timestr_empty(const char *format, time_t value)
 {
   if (value > 0) {
     struct tm timeinfo;
-    char buffer[64];
+    char buffer[CONFIG_FORMAT_STRFTIME_BUFFER_SIZE];
     memset(&buffer, 0, sizeof(buffer));
     localtime_r(&value, &timeinfo);
     strftime(buffer, sizeof(buffer), format, &timeinfo);
     return malloc_string(buffer);
-  } else {
-    return malloc_string("---");
+   } else {
+    return malloc_string(CONFIG_FORMAT_EMPTY_DATETIME);
   }
 }
 
