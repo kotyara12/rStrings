@@ -18,7 +18,7 @@ char * malloc_string(const char *source)
 {
   uint32_t len = strlen(source);
   char *ret = (char*)esp_malloc(len+1);
-  if (!ret) {
+  if (ret == NULL) {
     rlog_e(tagHEAP, "Out of memory!");
     // ledSysStateSet(SYSLED_ERROR, false);
     return NULL;
@@ -31,7 +31,7 @@ char * malloc_string(const char *source)
 char * malloc_stringl(const char *source, const uint32_t len) 
 {
   char *ret = (char*)esp_malloc(len+1);
-  if (!ret) {
+  if (ret == NULL) {
     rlog_e(tagHEAP, "Out of memory!");
     // ledSysStateSet(SYSLED_ERROR, false);
     return NULL;
@@ -53,9 +53,8 @@ char * malloc_stringf(const char *format, ...)
   len = vsnprintf(NULL, 0, format, args);
   // allocate memory for string
   ret = (char*)esp_malloc(len+1);
-  if (ret) {
+  if (ret != NULL) {
     memset(ret, 0, len+1);
-    // get resulting string into buffer
     vsnprintf(ret, len+1, format, args);
   } else {
     rlog_e(tagHEAP, "Out of memory!");
