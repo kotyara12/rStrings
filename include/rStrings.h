@@ -31,6 +31,12 @@ char* malloc_stringl(const char *source, const uint32_t len);
 char* malloc_stringf(const char *format, ...);
 
 /**
+ * Concatenation of two strings into one, with removal from the heap of constituent parts
+ * */
+char * concat_strings(char * part1, char * part2);
+char * concat_strings_div(char * part1, char * part2, const char* divider);
+
+/**
  * Generating a heap string containing a textual representation of the date and time
  * */
 size_t time2str(const char *format, time_t value, char* buffer, size_t buffer_size);

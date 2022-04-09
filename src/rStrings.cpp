@@ -16,51 +16,58 @@ static const char * tagHEAP = "OUT OF MEMORY";
 
 char * malloc_string(const char *source) 
 {
-  uint32_t len = strlen(source);
-  char *ret = (char*)esp_malloc(len+1);
-  if (ret == NULL) {
-    rlog_e(tagHEAP, "Out of memory!");
-    // ledSysStateSet(SYSLED_ERROR, false);
-    return NULL;
-  }
-  memset(ret, 0, len+1);
-  strcpy(ret, source);
-  return ret;
+  if (source) {
+    uint32_t len = strlen(source);
+    char *ret = (char*)esp_malloc(len+1);
+    if (!ret) {
+      rlog_e(tagHEAP, "Out of memory!");
+      return nullptr;
+    }
+    memset(ret, 0, len+1);
+    strcpy(ret, source);
+    return ret;
+  };
+  return nullptr;
 }
 
 char * malloc_stringl(const char *source, const uint32_t len) 
 {
-  char *ret = (char*)esp_malloc(len+1);
-  if (ret == NULL) {
-    rlog_e(tagHEAP, "Out of memory!");
-    // ledSysStateSet(SYSLED_ERROR, false);
-    return NULL;
-  }
-  memset(ret, 0, len+1);
-  strncpy(ret, source, len);
-  return ret;
+  if (source) {
+    char *ret = (char*)esp_malloc(len+1);
+    if (!ret) {
+      rlog_e(tagHEAP, "Out of memory!");
+      return nullptr;
+    }
+    memset(ret, 0, len+1);
+    strncpy(ret, source, len);
+    return ret;
+  };
+  return nullptr;
 }
 
 char * malloc_stringf(const char *format, ...) 
 {
-  uint32_t len;
-  va_list args;
-  char *ret;
-
-  // get the list of arguments
-  va_start(args, format);
-  // calculate length of resulting string
-  len = vsnprintf(NULL, 0, format, args);
-  // allocate memory for string
-  ret = (char*)esp_malloc(len+1);
-  if (ret != NULL) {
-    memset(ret, 0, len+1);
-    vsnprintf(ret, len+1, format, args);
-  } else {
-    rlog_e(tagHEAP, "Out of memory!");
-    // ledSysStateSet(SYSLED_ERROR, false);
+  char *ret = nullptr;
+  if (format) {
+    // get the list of arguments
+    va_list args1, args2;
+    va_start(args1, format);
+    // calculate length of resulting string
+    va_copy(args2, args1);
+    int len = vsnprintf(nullptr, 0, format, args2);
+    va_end(args2);
+    // allocate memory for string
+    if (len > 0) {
+      ret = (char*)esp_malloc(len+1);
+      if (ret) {
+        memset(ret, 0, len+1);
+        vsnprintf(ret, len+1, format, args2);
+      } else {
+        rlog_e(tagHEAP, "Out of memory!");
+      };
+    };
+    va_end(args1);
   };
-  va_end(args);
   return ret;
 }
 
@@ -128,6 +135,39 @@ char * malloc_timespan_dhms(time_t value)
   return malloc_stringf("%d.%.2d:%.2d:%.2d", d, h, m, s);
 }
 
+char * concat_strings(char * part1, char * part2)
+{
+  char * ret = nullptr;
+  if (part1) {
+    if (part2) {
+      ret = malloc_stringf("%s%s", part1, part2);
+      free(part1);
+      free(part2);
+    } else {
+      ret = part1;
+    };
+  } else {
+    ret = part2;
+  };
+  return ret;
+}
+
+char * concat_strings_div(char * part1, char * part2, const char* divider)
+{
+  char * ret = nullptr;
+  if (part1) {
+    if (part2) {
+      ret = malloc_stringf("%s%s%s", part1, divider, part2);
+      free(part1);
+      free(part2);
+    } else {
+      ret = part1;
+    };
+  } else {
+    ret = part2;
+  };
+  return ret;
+}
 
 // -----------------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------- Create topics ------------------------------------------------------
