@@ -9,6 +9,7 @@
 #include <string.h>
 
 static const char * tagHEAP = "OUT OF MEMORY";
+static const char * tagFMTS = "FORMAT";
 
 // -----------------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------- Format strings -----------------------------------------------------
@@ -20,7 +21,7 @@ char * malloc_string(const char *source)
     uint32_t len = strlen(source);
     char *ret = (char*)esp_malloc(len+1);
     if (!ret) {
-      rlog_e(tagHEAP, "Out of memory!");
+      rlog_e(tagHEAP, "Failed to create string: out of memory!");
       return nullptr;
     }
     memset(ret, 0, len+1);
@@ -35,7 +36,7 @@ char * malloc_stringl(const char *source, const uint32_t len)
   if (source) {
     char *ret = (char*)esp_malloc(len+1);
     if (!ret) {
-      rlog_e(tagHEAP, "Out of memory!");
+      rlog_e(tagHEAP, "Failed to create string: out of memory!");
       return nullptr;
     }
     memset(ret, 0, len+1);
@@ -48,7 +49,7 @@ char * malloc_stringl(const char *source, const uint32_t len)
 char * malloc_stringf(const char *format, ...) 
 {
   char *ret = nullptr;
-  if (format) {
+  if (format != nullptr) {
     // get the list of arguments
     va_list args1, args2;
     va_start(args1, format);
@@ -63,9 +64,32 @@ char * malloc_stringf(const char *format, ...)
         memset(ret, 0, len+1);
         vsnprintf(ret, len+1, format, args2);
       } else {
-        rlog_e(tagHEAP, "Out of memory!");
+        rlog_e(tagHEAP, "Failed to format string: out of memory!");
       };
     };
+    va_end(args1);
+  };
+  return ret;
+}
+
+uint16_t format_string(char* buffer, uint16_t biffer_size, const char *format, ...)
+{
+  uint16_t ret = 0;
+  if (buffer && format) {
+    memset(buffer, 0, biffer_size);
+    // get the list of arguments
+    va_list args1, args2;
+    va_start(args1, format);
+    // calculate length of resulting string
+    va_copy(args2, args1);
+    uint16_t len = vsnprintf(nullptr, 0, format, args2);
+    va_end(args2);
+    // format string
+    if (len+1 > biffer_size) {
+      ret = -len;
+      rlog_e(tagFMTS, "Buffer %d bytes too small to hold formatted string, %d bytes needed", biffer_size, len+1);
+    };
+    ret = vsnprintf(buffer, biffer_size, format, args1);
     va_end(args1);
   };
   return ret;

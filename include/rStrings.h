@@ -29,6 +29,7 @@ char* malloc_stringl(const char *source, const uint32_t len);
  * Generating a string in heap with formatting
  * */
 char* malloc_stringf(const char *format, ...);
+uint16_t format_string(char* buffer, uint16_t biffer_size, const char *format, ...);
 
 /**
  * Concatenation of two strings into one, with removal from the heap of constituent parts
