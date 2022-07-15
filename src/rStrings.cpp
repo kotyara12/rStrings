@@ -20,7 +20,7 @@ char * malloc_string(const char *source)
   if (source) {
     uint32_t len = strlen(source);
     char *ret = (char*)esp_malloc(len+1);
-    if (!ret) {
+    if (ret == nullptr) {
       rlog_e(tagHEAP, "Failed to create string: out of memory!");
       return nullptr;
     }
@@ -35,7 +35,7 @@ char * malloc_stringl(const char *source, const uint32_t len)
 {
   if (source) {
     char *ret = (char*)esp_malloc(len+1);
-    if (!ret) {
+    if (ret == nullptr) {
       rlog_e(tagHEAP, "Failed to create string: out of memory!");
       return nullptr;
     }
@@ -51,6 +51,51 @@ char * malloc_stringf(const char *format, ...)
   char *ret = nullptr;
   if (format != nullptr) {
     // get the list of arguments
+    va_list args;
+    va_start(args, format);
+    // calculate length of resulting string
+    int len = vsnprintf(nullptr, 0, format, args);
+    // allocate memory for string
+    if (len > 0) {
+      ret = (char*)esp_malloc(len+1);
+      if (ret != nullptr) {
+        memset(ret, 0, len+1);
+        vsnprintf(ret, len+1, format, args);
+      } else {
+        rlog_e(tagHEAP, "Failed to format string: out of memory!");
+      };
+    };
+    va_end(args);
+  };
+  return ret;
+}
+
+uint16_t format_string(char* buffer, uint16_t buffer_size, const char *format, ...)
+{
+  uint16_t ret = 0;
+  if (buffer && format) {
+    memset(buffer, 0, buffer_size);
+    // get the list of arguments
+    va_list args;
+    va_start(args, format);
+    uint16_t len = vsnprintf(nullptr, 0, format, args);
+    // format string
+    if (len+1 > buffer_size) {
+      ret = -len;
+      rlog_e(tagFMTS, "Buffer %d bytes too small to hold formatted string, %d bytes needed", buffer_size, len+1);
+    };
+    ret = vsnprintf(buffer, buffer_size, format, args);
+    va_end(args);
+  };
+  return ret;
+}
+
+/*****
+char * malloc_stringf(const char *format, ...) 
+{
+  char *ret = nullptr;
+  if (format != nullptr) {
+    // get the list of arguments
     va_list args1, args2;
     va_start(args1, format);
     // calculate length of resulting string
@@ -60,7 +105,7 @@ char * malloc_stringf(const char *format, ...)
     // allocate memory for string
     if (len > 0) {
       ret = (char*)esp_malloc(len+1);
-      if (ret) {
+      if (ret != nullptr) {
         memset(ret, 0, len+1);
         vsnprintf(ret, len+1, format, args2);
       } else {
@@ -94,6 +139,7 @@ uint16_t format_string(char* buffer, uint16_t biffer_size, const char *format, .
   };
   return ret;
 }
+****/
 
 size_t time2str(const char *format, time_t value, char* buffer, size_t buffer_size)
 {
