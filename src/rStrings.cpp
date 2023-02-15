@@ -1,12 +1,17 @@
 #include "rStrings.h"
-#include "rLog.h"
-#include "reEsp32.h"
 #include "project_config.h"
 #include "def_consts.h"
+#include "rLog.h"
 #include <stdio.h>
 #include <stdarg.h>
 #include <stdlib.h>
 #include <string.h>
+#if defined(__has_include) && __has_include("reEsp32.h")
+  #include "reEsp32.h"
+  #define USE_ESP_MALLOC 1
+#else
+  #define USE_ESP_MALLOC 0
+#endif
 
 static const char * tagHEAP = "OUT OF MEMORY";
 static const char * tagFMTS = "FORMAT";
@@ -19,7 +24,11 @@ char * malloc_string(const char *source)
 {
   if (source) {
     uint32_t len = strlen(source);
-    char *ret = (char*)esp_malloc(len+1);
+    #if USE_ESP_MALLOC
+      char *ret = (char*)esp_malloc(len+1);
+    #else
+      char *ret = (char*)malloc(len+1);
+    #endif
     if (ret == nullptr) {
       rlog_e(tagHEAP, "Failed to create string: out of memory!");
       return nullptr;
@@ -34,7 +43,11 @@ char * malloc_string(const char *source)
 char * malloc_stringl(const char *source, const uint32_t len) 
 {
   if (source) {
-    char *ret = (char*)esp_malloc(len+1);
+    #if USE_ESP_MALLOC
+      char *ret = (char*)esp_malloc(len+1);
+    #else
+      char *ret = (char*)malloc(len+1);
+    #endif
     if (ret == nullptr) {
       rlog_e(tagHEAP, "Failed to create string: out of memory!");
       return nullptr;
@@ -57,7 +70,11 @@ char * malloc_stringf(const char *format, ...)
     int len = vsnprintf(nullptr, 0, format, args);
     // allocate memory for string
     if (len > 0) {
-      ret = (char*)esp_malloc(len+1);
+      #if USE_ESP_MALLOC
+        ret = (char*)esp_malloc(len+1);
+      #else
+        ret = (char*)malloc(len+1);
+      #endif
       if (ret != nullptr) {
         memset(ret, 0, len+1);
         vsnprintf(ret, len+1, format, args);
@@ -90,56 +107,6 @@ uint16_t format_string(char* buffer, uint16_t buffer_size, const char *format, .
   return ret;
 }
 
-/*****
-char * malloc_stringf(const char *format, ...) 
-{
-  char *ret = nullptr;
-  if (format != nullptr) {
-    // get the list of arguments
-    va_list args1, args2;
-    va_start(args1, format);
-    // calculate length of resulting string
-    va_copy(args2, args1);
-    int len = vsnprintf(nullptr, 0, format, args2);
-    va_end(args2);
-    // allocate memory for string
-    if (len > 0) {
-      ret = (char*)esp_malloc(len+1);
-      if (ret != nullptr) {
-        memset(ret, 0, len+1);
-        vsnprintf(ret, len+1, format, args2);
-      } else {
-        rlog_e(tagHEAP, "Failed to format string: out of memory!");
-      };
-    };
-    va_end(args1);
-  };
-  return ret;
-}
-
-uint16_t format_string(char* buffer, uint16_t biffer_size, const char *format, ...)
-{
-  uint16_t ret = 0;
-  if (buffer && format) {
-    memset(buffer, 0, biffer_size);
-    // get the list of arguments
-    va_list args1, args2;
-    va_start(args1, format);
-    // calculate length of resulting string
-    va_copy(args2, args1);
-    uint16_t len = vsnprintf(nullptr, 0, format, args2);
-    va_end(args2);
-    // format string
-    if (len+1 > biffer_size) {
-      ret = -len;
-      rlog_e(tagFMTS, "Buffer %d bytes too small to hold formatted string, %d bytes needed", biffer_size, len+1);
-    };
-    ret = vsnprintf(buffer, biffer_size, format, args1);
-    va_end(args1);
-  };
-  return ret;
-}
-****/
 
 size_t time2str(const char *format, time_t value, char* buffer, size_t buffer_size)
 {
@@ -181,7 +148,7 @@ char * malloc_timestr_empty(const char *format, time_t value)
     localtime_r(&value, &timeinfo);
     strftime(buffer, sizeof(buffer), format, &timeinfo);
     return malloc_string(buffer);
-   } else {
+  } else {
     return malloc_string(CONFIG_FORMAT_EMPTY_DATETIME);
   }
 }
