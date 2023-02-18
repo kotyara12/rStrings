@@ -38,12 +38,18 @@ char * concat_strings(char * part1, char * part2);
 char * concat_strings_div(char * part1, char * part2, const char* divider);
 
 /**
+ * Converting 64-bit integers to a string
+ * */
+char* _i64toa(int64_t value, char* buffer, uint8_t radix);
+char* _ui64toa(uint64_t value, char* buffer, uint8_t radix);
+
+/**
  * Generating a heap string containing a textual representation of the date and time
  * */
-size_t time2str(const char *format, time_t value, char* buffer, size_t buffer_size);
-size_t time2str_empty(const char *format, time_t value, char* buffer, size_t buffer_size);
-char* malloc_timestr(const char *format, time_t value);
-char* malloc_timestr_empty(const char *format, time_t value);
+size_t time2str(const char *format, time_t *value, char* buffer, size_t buffer_size);
+size_t time2str_empty(const char *format, time_t *value, char* buffer, size_t buffer_size);
+// char* malloc_timestr(const char *format, time_t value);
+// char* malloc_timestr_empty(const char *format, time_t value);
 
 /**
  * Generating a heap string containing a textual representation of a time interval in hours, minutes, and seconds

@@ -107,21 +107,103 @@ uint16_t format_string(char* buffer, uint16_t buffer_size, const char *format, .
   return ret;
 }
 
-
-size_t time2str(const char *format, time_t value, char* buffer, size_t buffer_size)
+char* _i64toa(int64_t value, char* buffer, uint8_t radix) 
 {
+  // Check radix
+  if (radix < 2 || radix > 16) { 
+    *buffer = '\0'; 
+    return buffer; 
+  };
+
+  uint8_t negative, digit;
+  uint64_t val;
+  char *pos = buffer, *pos1 = buffer, tmp;
+
+  if (value < 0 && radix == 10) {
+    negative = 1;
+    val = - value;
+  } else {
+    negative = 0;
+    val = value;
+  };
+
+  do {
+    digit = val % radix;
+    val = val / radix;
+    if (digit < 10) {
+      *pos++ = '0' + digit;
+    } else {
+      *pos++ = 'a' + digit - 10;
+    };
+  } while (val != 0L);
+
+  if (negative) *pos++ = '-'; 
+  
+  *pos-- = '\0';
+
+  while(pos1 < pos) {
+    tmp = *pos;
+    *pos--= *pos1;
+    *pos1++ = tmp;
+  };
+
+  return buffer;
+}
+
+char* _ui64toa(uint64_t value, char* buffer, uint8_t radix) 
+{
+  // Check radix
+  if (radix < 2 || radix > 16) { 
+    *buffer = '\0'; 
+    return buffer; 
+  };
+
+  uint8_t digit;
+  uint64_t val;
+  char *pos = buffer, *pos1 = buffer, tmp;
+
+  val = value;
+  do {
+    digit = val % radix;
+    val = val / radix;
+    if (digit < 10) {
+      *pos++ = '0' + digit;
+    } else {
+      *pos++ = 'a' + digit - 10;
+    };
+  } while (val != 0L);
+
+  *pos-- = '\0';
+
+  while(pos1 < pos) {
+    tmp = *pos;
+    *pos--= *pos1;
+    *pos1++ = tmp;
+  };
+
+  return buffer;
+}
+
+size_t time2str(const char *format, time_t *value, char* buffer, size_t buffer_size)
+{
+  if ((buffer == nullptr) || (value == nullptr) || (buffer_size == 0)) {
+    return 0;
+  };
+  memset(buffer, 0, buffer_size);
   struct tm timeinfo;
-  memset(&buffer, 0, buffer_size);
-  localtime_r(&value, &timeinfo);
+  localtime_r(value, &timeinfo);
   return strftime(buffer, buffer_size, format, &timeinfo);
 }
 
-size_t time2str_empty(const char *format, time_t value, char* buffer, size_t buffer_size)
+size_t time2str_empty(const char *format, time_t *value, char* buffer, size_t buffer_size)
 {
-  if (value > 0) {
+  if ((buffer == nullptr) || (value == nullptr) || (buffer_size == 0)) {
+    return 0;
+  };
+  memset(buffer, 0, buffer_size);
+  if (*value > 0) {
     struct tm timeinfo;
-    memset(&buffer, 0, buffer_size);
-    localtime_r(&value, &timeinfo);
+    localtime_r(value, &timeinfo);
     return strftime(buffer, buffer_size, format, &timeinfo);
   } else {
     strcpy(buffer, CONFIG_FORMAT_EMPTY_DATETIME);
@@ -132,9 +214,9 @@ size_t time2str_empty(const char *format, time_t value, char* buffer, size_t buf
 char * malloc_timestr(const char *format, time_t value)
 {
   struct tm timeinfo;
-  char buffer[CONFIG_FORMAT_STRFTIME_BUFFER_SIZE];
-  memset(&buffer, 0, sizeof(buffer));
   localtime_r(&value, &timeinfo);
+  char buffer[CONFIG_FORMAT_STRFTIME_BUFFER_SIZE];
+  memset(buffer, 0, sizeof(buffer));
   strftime(buffer, sizeof(buffer), format, &timeinfo);
   return malloc_string(buffer);
 }
@@ -143,9 +225,9 @@ char * malloc_timestr_empty(const char *format, time_t value)
 {
   if (value > 0) {
     struct tm timeinfo;
-    char buffer[CONFIG_FORMAT_STRFTIME_BUFFER_SIZE];
-    memset(&buffer, 0, sizeof(buffer));
     localtime_r(&value, &timeinfo);
+    char buffer[CONFIG_FORMAT_STRFTIME_BUFFER_SIZE];
+    memset(buffer, 0, sizeof(buffer));
     strftime(buffer, sizeof(buffer), format, &timeinfo);
     return malloc_string(buffer);
   } else {

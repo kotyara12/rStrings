@@ -1,6 +1,6 @@
 {
   "name": "rStrings",
-  "version": "3.8.1",
+  "version": "3.9.1",
   "description": "Simple library for dynamically generating strings based on templates (format and time)",
   "keywords": "strings",
   "authors":
