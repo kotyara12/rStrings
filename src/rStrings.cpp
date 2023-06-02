@@ -13,8 +13,10 @@
   #define USE_ESP_MALLOC 0
 #endif
 
+#if CONFIG_RLOG_PROJECT_LEVEL > RLOG_LEVEL_NONE
 static const char * tagHEAP = "OUT OF MEMORY";
 static const char * tagFMTS = "FORMAT";
+#endif // CONFIG_RLOG_PROJECT_LEVEL
 
 // -----------------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------- Format strings -----------------------------------------------------
