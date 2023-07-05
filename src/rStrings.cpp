@@ -66,10 +66,12 @@ char * malloc_stringf(const char *format, ...)
   char *ret = nullptr;
   if (format != nullptr) {
     // get the list of arguments
-    va_list args;
-    va_start(args, format);
+    va_list args1, args2;
+    va_start(args1, format);
+    va_copy(args2, args1);
     // calculate length of resulting string
-    int len = vsnprintf(nullptr, 0, format, args);
+    int len = vsnprintf(nullptr, 0, format, args1);
+    va_end(args1);
     // allocate memory for string
     if (len > 0) {
       #if USE_ESP_MALLOC
@@ -79,12 +81,12 @@ char * malloc_stringf(const char *format, ...)
       #endif
       if (ret != nullptr) {
         memset(ret, 0, len+1);
-        vsnprintf(ret, len+1, format, args);
+        vsnprintf(ret, len+1, format, args2);
       } else {
         rlog_e(tagHEAP, "Failed to format string: out of memory!");
       };
     };
-    va_end(args);
+    va_end(args2);
   };
   return ret;
 }
