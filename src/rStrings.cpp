@@ -27,7 +27,7 @@ char * malloc_string(const char *source)
   if (source) {
     uint32_t len = strlen(source);
     #if USE_ESP_MALLOC
-      char *ret = (char*)esp_malloc(len+1);
+      char *ret = (char*)psram_malloc(len+1);
     #else
       char *ret = (char*)malloc(len+1);
     #endif
@@ -46,7 +46,7 @@ char * malloc_stringl(const char *source, const uint32_t len)
 {
   if (source) {
     #if USE_ESP_MALLOC
-      char *ret = (char*)esp_malloc(len+1);
+      char *ret = (char*)psram_malloc(len+1);
     #else
       char *ret = (char*)malloc(len+1);
     #endif
@@ -75,7 +75,7 @@ char * malloc_stringf(const char *format, ...)
     // allocate memory for string
     if (len > 0) {
       #if USE_ESP_MALLOC
-        ret = (char*)esp_malloc(len+1);
+        ret = (char*)psram_malloc(len+1);
       #else
         ret = (char*)malloc(len+1);
       #endif
